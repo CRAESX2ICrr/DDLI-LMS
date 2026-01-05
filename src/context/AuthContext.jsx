@@ -46,7 +46,9 @@ const logout = () => {
   localStorage.removeItem("lms-state");
   localStorage.removeItem("pre-test-progress");
   localStorage.removeItem("post-test-progress");
-  localStorage.removeItem("vimeo-progress-676247342"); // ✅ FIX
+  localStorage.removeItem("vimeo-progress-676247342"); 
+
+  localStorage.removeItem("lms-questions");
 
   setState(initialState);
 };

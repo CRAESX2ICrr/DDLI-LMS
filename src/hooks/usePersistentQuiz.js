@@ -1,41 +1,53 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { QUESTIONS } from "@/data/questions";
 
 export function usePersistentQuiz(storageKey) {
-  const [questions, setQuestions] = useState([]);
+  const [quizQuestions, setQuizQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [selected, setSelected] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
 
-  // Restore or initialize
   useEffect(() => {
     const saved = localStorage.getItem(storageKey);
 
+    // 🔁 Restore progress if valid
     if (saved) {
-      const data = JSON.parse(saved);
-      setQuestions(data.questions);
-      setCurrentIndex(data.currentIndex);
-      setAnswers(data.answers);
-      setSubmitted(data.submitted);
-      setScore(data.score);
-      return;
+      try {
+        const data = JSON.parse(saved);
+
+        if (Array.isArray(data.questions) && data.questions.length > 0) {
+          setQuizQuestions(data.questions);
+          setCurrentIndex(data.currentIndex ?? 0);
+          setAnswers(data.answers ?? {});
+          setSubmitted(data.submitted ?? false);
+          setScore(data.score ?? 0);
+          return;
+        }
+      } catch {
+        // corrupted storage → fall through
+      }
     }
 
+    // 🆕 Fresh quiz — QUESTIONS is source of truth
     const shuffled = [...QUESTIONS].sort(() => 0.5 - Math.random());
     const selectedQuestions = shuffled.slice(0, 3);
 
-    const initial = {
-      questions: selectedQuestions,
-      currentIndex: 0,
-      answers: {},
-      submitted: false,
-      score: 0,
-    };
+    setQuizQuestions(selectedQuestions);
 
-    setQuestions(selectedQuestions);
-    localStorage.setItem(storageKey, JSON.stringify(initial));
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify({
+        questions: selectedQuestions,
+        currentIndex: 0,
+        answers: {},
+        submitted: false,
+        score: 0,
+      })
+    );
   }, [storageKey]);
 
   const persist = (data) => {
@@ -43,7 +55,9 @@ export function usePersistentQuiz(storageKey) {
   };
 
   const answerQuestion = () => {
-    const currentQuestion = questions[currentIndex];
+    const currentQuestion = quizQuestions[currentIndex];
+    if (!currentQuestion) return;
+
     const updatedAnswers = {
       ...answers,
       [currentQuestion.id]: selected,
@@ -53,17 +67,13 @@ export function usePersistentQuiz(storageKey) {
     let isSubmitted = submitted;
     let finalScore = score;
 
-    if (currentIndex < questions.length - 1) {
+    if (currentIndex < quizQuestions.length - 1) {
       nextIndex += 1;
     } else {
-      let total = 0;
-      questions.forEach((q) => {
-        if (updatedAnswers[q.id] === q.correctIndex) {
-          total += 1;
-        }
-      });
+      finalScore = quizQuestions.reduce((total, q) => {
+        return total + (updatedAnswers[q.id] === q.correctIndex ? 1 : 0);
+      }, 0);
 
-      finalScore = total;
       isSubmitted = true;
     }
 
@@ -74,7 +84,7 @@ export function usePersistentQuiz(storageKey) {
     setScore(finalScore);
 
     persist({
-      questions,
+      questions: quizQuestions,
       currentIndex: nextIndex,
       answers: updatedAnswers,
       submitted: isSubmitted,
@@ -89,7 +99,7 @@ export function usePersistentQuiz(storageKey) {
   };
 
   return {
-    questions,
+    questions: quizQuestions,
     currentIndex,
     selected,
     setSelected,

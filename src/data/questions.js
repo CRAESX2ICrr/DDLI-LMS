@@ -94,4 +94,16 @@ export const QUESTIONS = [
     ],
     correctIndex: 1,
   },
+{
+  id: 11,
+  question: "Which JavaScript method is used to convert a JSON string into a JavaScript object?",
+  options: [
+    "JSON.stringify()",
+    "JSON.parse()",
+    "Object.fromJSON()",
+    "JSON.toObject()",
+  ],
+  correctIndex: 1,
+},
+
 ];

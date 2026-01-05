@@ -4,25 +4,36 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
-  const { setState } = useAuth();
+  const { login } = useAuth(); // ✅ USE login, not setState
 
-  // Local state
   const [role, setRole] = useState("USER");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleLogin = () => {
-    if (username.toLowerCase() === "clayton" && password === "12345678") {
-      setError("");
+    // ✅ ADMIN LOGIN
+    if (role === "ADMIN") {
+      if (username === "adminer" && password === "admin1234") {
+        setError("");
+        login(username, "ADMIN");
+        return;
+      } else {
+        setError("Invalid admin credentials");
+        return;
+      }
+    }
 
-      setState((prev) => ({
-        ...prev,
-        user: { username, role },
-        step: "PRETEST", 
-      }));
-    } else {
-      setError("Invalid username or password");
+    // ✅ USER LOGIN
+    if (role === "USER") {
+      if (username.toLowerCase() === "clayton" && password === "12345678") {
+        setError("");
+        login(username, "USER");
+        return;
+      } else {
+        setError("Invalid username or password");
+        return;
+      }
     }
   };
 
@@ -86,13 +97,12 @@ export default function Login() {
           <p className="mt-4 text-sm text-red-400 text-center">{error}</p>
         )}
 
-<button
-  onClick={handleLogin}
-  className="mt-8 mx-auto block px-10 py-2 rounded-full bg-indigo-600 text-sm font-medium text-white shadow-lg shadow-indigo-600/30 hover:bg-indigo-500 transition"
->
-  Login as {role}
-</button>
-
+        <button
+          onClick={handleLogin}
+          className="mt-8 mx-auto block px-10 py-2 rounded-full bg-indigo-600 text-sm font-medium text-white shadow-lg shadow-indigo-600/30 hover:bg-indigo-500 transition"
+        >
+          Login as {role}
+        </button>
       </div>
     </div>
   );
