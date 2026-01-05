@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
-  const { login } = useAuth(); // ✅ USE login, not setState
+  const { login } = useAuth(); 
 
   const [role, setRole] = useState("USER");
   const [username, setUsername] = useState("");
@@ -12,7 +12,7 @@ export default function Login() {
   const [error, setError] = useState("");
 
   const handleLogin = () => {
-    // ✅ ADMIN LOGIN
+    // ADMIN LOGIN
     if (role === "ADMIN") {
       if (username === "adminer" && password === "admin1234") {
         setError("");
@@ -24,7 +24,7 @@ export default function Login() {
       }
     }
 
-    // ✅ USER LOGIN
+    // USER LOGIN
     if (role === "USER") {
       if (username.toLowerCase() === "clayton" && password === "12345678") {
         setError("");

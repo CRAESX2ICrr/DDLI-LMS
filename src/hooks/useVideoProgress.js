@@ -26,7 +26,7 @@ export default function useVideoProgress() {
 
     playerRef.current = player;
 
-    // 🔑 WAIT FOR PLAYER TO BE READY
+    // WAIT FOR PLAYER TO BE READY
     await player.ready();
     setIsReady(true);
 

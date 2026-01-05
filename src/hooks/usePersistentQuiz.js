@@ -28,11 +28,10 @@ export function usePersistentQuiz(storageKey) {
           return;
         }
       } catch {
-        // corrupted storage → fall through
+        
       }
     }
 
-    // 🆕 Fresh quiz — QUESTIONS is source of truth
     const shuffled = [...QUESTIONS].sort(() => 0.5 - Math.random());
     const selectedQuestions = shuffled.slice(0, 3);
 

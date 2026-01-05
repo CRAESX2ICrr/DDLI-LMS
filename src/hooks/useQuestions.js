@@ -1,4 +1,3 @@
-// hooks/useQuestions.js
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
@@ -11,7 +10,7 @@ export function useQuestions() {
   const [questions, setQuestions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  /* ===== INIT ===== */
+  /* INIT */
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -22,13 +21,13 @@ export function useQuestions() {
     }
   }, []);
 
-  /* ===== PERSIST ===== */
+  /* PERSIST */
   const persist = (updated) => {
     setQuestions(updated);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
   };
 
-  /* ===== CRUD ===== */
+  /*  CRUD */
   const updateQuestion = (id, text) => {
     persist(
       questions.map(q =>
@@ -76,7 +75,7 @@ export function useQuestions() {
     ]);
   };
 
-  /* ===== PAGINATION ===== */
+  /* PAGINATION */
   const totalPages = Math.ceil(
     questions.length / QUESTIONS_PER_PAGE
   );

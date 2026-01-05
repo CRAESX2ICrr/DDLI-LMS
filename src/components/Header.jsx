@@ -6,7 +6,7 @@ export default function Header() {
   const { user, logout } = useAuth();
 
   const handleLogout = () => {
-    logout(); // resets state + localStorage
+    logout();     // resets state + localStorage
   };
 
   return (

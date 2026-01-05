@@ -22,12 +22,12 @@ export default function Home() {
     return <Login />;
   }
 
-  // 🔑 ADMIN OVERRIDE (THIS IS THE KEY FIX)
+  // ADMIN
   if (user.role === "ADMIN") {
     return <Admin />;
   }
 
-  // 👇 USER FLOW ONLY
+  // USER FLOW ONLY
   return (
     <>
       {step === "PRETEST" && <Pretest />}

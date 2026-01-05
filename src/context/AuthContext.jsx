@@ -14,20 +14,35 @@ const initialState = {
 
 export function AuthProvider({ children }) {
   const [state, setState] = useState(initialState);
-  const [loading, setLoading] = useState(true); // 👈 ADD THIS
+  const [loading, setLoading] = useState(true); 
 
   // Restore from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem("lms-state");
+useEffect(() => {
+  const saved = localStorage.getItem("lms-state");
 
-    if (saved) {
-      setState(JSON.parse(saved));
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+
+      const validSteps = ["PRETEST", "VIDEO", "POSTTEST"];
+
+      setState({
+        ...initialState,
+        ...parsed,
+        step: validSteps.includes(parsed.step)
+          ? parsed.step
+          : "PRETEST",
+      });
+    } catch {
+      setState(initialState);
     }
+  }
 
-    setLoading(false); // 👈 hydration complete
-  }, []);
+  setLoading(false);
+}, []);
 
-  // Persist to localStorage (after hydration)
+
+  // Persist to localStorage 
   useEffect(() => {
     if (loading) return;
 
@@ -42,15 +57,12 @@ export function AuthProvider({ children }) {
     }));
   };
 
+
 const logout = () => {
-  localStorage.removeItem("lms-state");
-  localStorage.removeItem("pre-test-progress");
-  localStorage.removeItem("post-test-progress");
-  localStorage.removeItem("vimeo-progress-676247342"); 
-
-  localStorage.removeItem("lms-questions");
-
+  localStorage.clear(); 
+  
   setState(initialState);
+  window.location.href = "/";
 };
 
 
