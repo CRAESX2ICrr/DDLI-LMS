@@ -16,19 +16,23 @@ export default function Header() {
         <h1 className="text-white text-xl font-semibold tracking-wider">
           QUIZZLY
         </h1>
-        <h2 className="text-xs font-normal text-indigo-200/70">
+        <h2 className="hidden sm:block text-xs font-normal text-indigo-200/70">
           by Clayton Pereira
         </h2>
       </div>
 
 
-
         {user && (
           <div className="flex items-center gap-4 text-sm text-white/90">
-            <span>
-              Hello <strong>{user.username}</strong> · Role:{" "}
-              <strong>{user.role}</strong>
+
+            <span className="whitespace-nowrap">
+              Hello <strong>{user.username}</strong>
+              <span className="hidden sm:inline">
+                  {" "}· Role: 
+                <strong>{user.role}</strong>
+              </span>
             </span>
+
 
             <button
               onClick={handleLogout}
