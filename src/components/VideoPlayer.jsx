@@ -41,7 +41,11 @@ export default function VideoPlayer() {
 
         {/* VIMEO VIDEO */}
         <div className="rounded-xl overflow-hidden mb-2">
-          <div ref={vimeoRef} className="w-full h-[550px]" />
+         <div
+  ref={vimeoRef}
+  className="w-full h-[220px] sm:h-[320px] md:h-[450px] lg:h-[550px]"
+/>
+
         </div>
 
         {/* CONTROLS */}
