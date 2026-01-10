@@ -7,14 +7,14 @@ export default function Pretest() {
   const { setState } = useAuth();
 
   const {
-    questions,
-    currentIndex,
-    selected,
-    setSelected,
-    submitted,
-    score,
-    answerQuestion,
-    reset,
+    questions,                                                        // array quiz quest
+    currentIndex,                                                     // index current question
+    selected,                                                         // selected answer index for current question
+    setSelected,                                                      // setter for selected answer
+    submitted,                                                        // bool: quiz comp/not
+    score,            
+    answerQuestion,                                                   // validates answer and advances quiz
+    reset,                                                            // clears quiz progress from stor
   } = usePersistentQuiz("pretest-progress");
 
   if (questions.length === 0) return null;
@@ -46,7 +46,7 @@ export default function Pretest() {
         {!submitted ? (
           <>
             <p className="text-sm text-zinc-400 mb-4">
-              Question {currentIndex + 1} of {questions.length}
+              Question {currentIndex + 1} of {questions.length}             { /* quest x of 4*/}
             </p>
 
             <p className="font-medium mb-6">
@@ -59,9 +59,7 @@ export default function Pretest() {
                   key={i}
                   className={`flex gap-3 p-3 rounded-md border cursor-pointer
                     ${
-                      selected === i
-                        ? "border-indigo-500 bg-indigo-500/10"
-                        : "border-white/10"
+                      selected === i ? "border-indigo-500 bg-indigo-500/10" : "border-white/10"                   // ans cg looks whether select !*
                     }`}
                 >
                   <input
@@ -70,7 +68,7 @@ export default function Pretest() {
                     onChange={() => setSelected(i)}
                   />
                   {opt}
-                </label>
+                </label>                                   // answer text + radio
               ))}
             </div>
 
@@ -79,9 +77,7 @@ export default function Pretest() {
               disabled={selected === null}
               className="w-full bg-indigo-600 py-2.5 rounded-md disabled:opacity-50"
             >
-              {currentIndex === questions.length - 1
-                ? "Submit Pre-Test"
-                : "Next Question"}
+              {currentIndex === questions.length - 1 ? "Submit Pre-Test" : "Next Question"}
             </button>
           </>
         ) : (

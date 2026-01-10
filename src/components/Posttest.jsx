@@ -7,14 +7,14 @@ export default function Posttest() {
   const { setState } = useAuth();
 
   const {
-    questions,
-    currentIndex,
-    selected,
-    setSelected,
-    submitted,
+    questions,                                                      // array quiz quest
+    currentIndex,                                                   // index current question
+    selected,                                                       // selected answer index for current question
+    setSelected,                                                    // setter for selected answer
+    submitted,                                                      // bool: quiz comp/not
     score,
-    answerQuestion,
-  } = usePersistentQuiz("posttest-progress");
+    answerQuestion,                                                 // validates answer and advances quiz
+  } = usePersistentQuiz("posttest-progress");                       // clears quiz progress from storage
 
   if (questions.length === 0) return null;
 
@@ -31,6 +31,18 @@ export default function Posttest() {
     }
   };
 
+  const handleRetake = () => {
+    localStorage.removeItem("pretest-progress");                    // Remove saved per-user quiz progress
+    localStorage.removeItem("posttest-progress");
+
+    setState((prev) => ({
+      ...prev,
+      pretestScore: null,
+      posttestScore: null,
+      step: "PRETEST",
+    }));
+  };
+
   return (
     <main className="min-h-[calc(100vh-72px)] flex items-center justify-center px-4">
       <div className="w-full max-w-2xl bg-zinc-900/80 border border-white/10 rounded-xl p-8 text-white">
@@ -40,7 +52,7 @@ export default function Posttest() {
         {!submitted ? (
           <>
             <p className="text-sm text-zinc-400 mb-4">
-              Question {currentIndex + 1} of {questions.length}
+              Question {currentIndex + 1} of {questions.length}                        { /* quest x of 4*/}
             </p>
 
             <p className="font-medium mb-6">
@@ -53,9 +65,7 @@ export default function Posttest() {
                   key={i}
                   className={`flex gap-3 p-3 rounded-md border cursor-pointer
                     ${
-                      selected === i
-                        ? "border-indigo-500 bg-indigo-500/10"
-                        : "border-white/10"
+                      selected === i ? "border-indigo-500 bg-indigo-500/10" : "border-white/10"                // ans cg looks whether select !*
                     }`}
                 >
                   <input
@@ -89,9 +99,16 @@ export default function Posttest() {
               {questions.length}
             </p>
 
-            <p className="text-sm text-zinc-400">
-              Thank you for attempting the quiz.
-            </p>
+            <p className="text-sm text-zinc-400 mb-6"> Thank you for attempting the quiz. </p>
+
+            <div className="flex justify-center gap-3">
+              <button
+                onClick={handleRetake}
+                className="px-6 py-2 rounded-full bg-red-600 text-sm"
+              >
+                Retake Quiz
+              </button>
+            </div>
           </div>
         )}
       </div>

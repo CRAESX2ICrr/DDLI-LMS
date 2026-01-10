@@ -10,24 +10,35 @@ export function useQuestions() {
   const [questions, setQuestions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  /* INIT */
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      setQuestions(JSON.parse(saved));
-    } else {
-      setQuestions(QUESTIONS);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(QUESTIONS));
-    }
-  }, []);
+/* INIT */
+useEffect(() => {
+  const saved = localStorage.getItem(STORAGE_KEY);
 
-  /* PERSIST */
-  const persist = (updated) => {
-    setQuestions(updated);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-  };
+  if (saved) {
+    setQuestions(JSON.parse(saved));
+  } else {
+    persist(QUESTIONS); 
+  }
+}, []);
 
-  /*  CRUD */
+/* PERSIST */
+const persist = (updated) => {
+  setQuestions(updated);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
+  localStorage.removeItem("pretest-progress");
+  localStorage.removeItem("posttest-progress");
+};
+
+/* RESET */
+const resetQuestions = () => {
+  persist(QUESTIONS); 
+  setCurrentPage(1);
+};
+
+
+
+/*  CRUD */
   const updateQuestion = (id, text) => {
     persist(
       questions.map(q =>
@@ -96,5 +107,6 @@ export function useQuestions() {
     updateOption,
     setCorrect,
     deleteQuestion,
+    resetQuestions,
   };
 }

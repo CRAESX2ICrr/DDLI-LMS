@@ -8,7 +8,7 @@ const VIDEO_PROGRESS_KEY = "vimeo-progress-676247342";
 export default function useVideoProgress() {
   const playerRef = useRef(null);
 
-  const [isReady, setIsReady] = useState(false);
+  const [isReady, setIsReady] = useState(false);                                                                                                    // Is player fully loaded and safe, Vimeo loads async Calling methods before player.ready() causes errors
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -18,13 +18,19 @@ export default function useVideoProgress() {
     if (playerRef.current) return;
 
     const player = new Player(container, {
-      url: "https://player.vimeo.com/video/676247342",
+      url: "https://player.vimeo.com/video/91496024"
+,
+
       autoplay: true,
       controls: false,
       responsive: true,
+        title: false,
+        byline: false,
+        portrait: false,
     });
 
-    playerRef.current = player;
+    playerRef.current = player;                                                                               // creates mutable container whose .current you can r/w without trigger re-renders. In this hook used stores Player instance across renders so same instance is accessible from all functions 
+                                                                                                              // (initPlayer, togglePlay, restart, seekBack) without re-creating it.
 
     // WAIT FOR PLAYER TO BE READY
     await player.ready();

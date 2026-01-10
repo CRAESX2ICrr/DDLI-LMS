@@ -16,7 +16,7 @@ export default function Header() {
         <h1 className="text-white text-xl font-semibold tracking-wider">
           QUIZZLY
         </h1>
-        <h2 className="hidden sm:block text-xs font-normal text-indigo-200/70">
+        <h2 className="hidden sm:block text-xs font-normal text-indigo-200/70">   {/* Hidden on mobile */ }
           by Clayton Pereira
         </h2>
       </div>

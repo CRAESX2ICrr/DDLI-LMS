@@ -12,7 +12,7 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-white">
+      <div className="min-h-screen flex items-center justify-center text-[50px] text-white">
         Loading…
       </div>
     );
@@ -36,3 +36,22 @@ export default function Home() {
     </>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// component uses a state-driven, declarative approach where UI output
+// is a pure function of state, with conditional rendering used to enforce
+// authentication, role-based access, and step-by-step workflow progression.

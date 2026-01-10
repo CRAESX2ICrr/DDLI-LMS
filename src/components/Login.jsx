@@ -14,7 +14,7 @@ export default function Login() {
   const handleLogin = () => {
     // ADMIN LOGIN
     if (role === "ADMIN") {
-      if (username === "adminer" && password === "admin1234") {
+      if (username.toLowerCase() === "adminer" && password === "admin1234") {
         setError("");
         login(username, "ADMIN");
         return;
@@ -54,9 +54,7 @@ export default function Login() {
             <button
               onClick={() => setRole("USER")}
               className={`px-6 py-2 rounded-full text-sm transition ${
-                role === "USER"
-                  ? "bg-white/20 text-white"
-                  : "text-indigo-200 hover:text-white"
+                role === "USER" ? "bg-white/20 text-white" : "text-indigo-200 hover:text-white"
               }`}
             >
               User
@@ -65,9 +63,7 @@ export default function Login() {
             <button
               onClick={() => setRole("ADMIN")}
               className={`px-6 py-2 rounded-full text-sm transition ${
-                role === "ADMIN"
-                  ? "bg-white/20 text-white"
-                  : "text-indigo-200 hover:text-white"
+                role === "ADMIN" ? "bg-white/20 text-white" : "text-indigo-200 hover:text-white"
               }`}
             >
               Admin

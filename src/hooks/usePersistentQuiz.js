@@ -1,24 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { QUESTIONS } from "@/data/questions";
+import { QUESTIONS } from "@/data/questions";                             // fallback
 
 export function usePersistentQuiz(storageKey) {
-  const [quizQuestions, setQuizQuestions] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [selected, setSelected] = useState(null);
-  const [submitted, setSubmitted] = useState(false);
+  const [quizQuestions, setQuizQuestions] = useState([]);                                                               // Questions used in this quiz instance
+  const [currentIndex, setCurrentIndex] = useState(0);                                                                  // Index of the current question
+  const [answers, setAnswers] = useState({});                                                                           // Maps questionId -> selected option index
+  const [selected, setSelected] = useState(null);                                                                       // Selected option for the active question
+  const [submitted, setSubmitted] = useState(false);                                                                    // quiz is complete
   const [score, setScore] = useState(0);
 
   useEffect(() => {
     const saved = localStorage.getItem(storageKey);
 
-    // 🔁 Restore progress if valid
     if (saved) {
       try {
         const data = JSON.parse(saved);
-
         if (Array.isArray(data.questions) && data.questions.length > 0) {
           setQuizQuestions(data.questions);
           setCurrentIndex(data.currentIndex ?? 0);
@@ -28,18 +26,34 @@ export function usePersistentQuiz(storageKey) {
           return;
         }
       } catch {
-        
+        // ignore and fall through
       }
     }
 
-    const shuffled = [...QUESTIONS].sort(() => 0.5 - Math.random());
-    const selectedQuestions = shuffled.slice(0, 3);
+    const loadQuestionBank = () => {
+      const stored = localStorage.getItem("lms-questions");
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length >= 3) {
+            return parsed;
+          }
+        } catch {
+          // ignore bad JSON, fall back
+        }
+      }
+      return QUESTIONS;
+    };
+
+    const questionBank = loadQuestionBank();
+    const shuffled = [...questionBank].sort(() => 0.5 - Math.random());                                                 // copy quest,rand reord copied array
+    const selectedQuestions = shuffled.slice(0, 3);                                                                     // tak3 q ret new arr this lim 3
 
     setQuizQuestions(selectedQuestions);
 
     localStorage.setItem(
       storageKey,
-      JSON.stringify({
+      JSON.stringify({                                                                                                  // quiz state is JSobj in memo,not string. localStorage only store strings, so we convert first.
         questions: selectedQuestions,
         currentIndex: 0,
         answers: {},
@@ -49,6 +63,8 @@ export function usePersistentQuiz(storageKey) {
     );
   }, [storageKey]);
 
+
+  
   const persist = (data) => {
     localStorage.setItem(storageKey, JSON.stringify(data));
   };
@@ -108,3 +124,4 @@ export function usePersistentQuiz(storageKey) {
     reset,
   };
 }
+

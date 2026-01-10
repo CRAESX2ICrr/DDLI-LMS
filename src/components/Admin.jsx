@@ -13,6 +13,7 @@ export default function Admin() {
     updateOption,
     setCorrect,
     deleteQuestion,
+    resetQuestions,
   } = useQuestions();
 
   return (
@@ -20,15 +21,25 @@ export default function Admin() {
       {/* Header */}
       <div className="max-w-5xl mx-auto flex items-center justify-between mb-8">
         <h1 className="text-2xl font-semibold">
-          Admin · Question Editor
+          Question Editor
         </h1>
 
-        <button
-          onClick={addQuestion}
-          className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm"
-        >
-          + Add Question
-        </button>
+    <div className="flex gap-3">
+      <button onClick={addQuestion}
+       className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm"
+      >
+        + Add Question
+      </button>
+
+      <button
+        onClick={resetQuestions}
+        className="px-4 py-2 rounded-lg bg-gray-600 hover:bg-gray-500 text-sm"
+      >
+        Reset
+      </button>
+    </div>
+
+
       </div>
 
       {/* Question Cards */}
@@ -46,14 +57,14 @@ export default function Admin() {
               className="w-full rounded-lg bg-black/40 p-3 text-sm resize-none"
             />
 
-            {q.options.map((opt, i) => (
+            {q.options.map((opt, i) => (                        // Loop through answers
               <div key={i} className="flex gap-3">
                 <input
                   type="radio"
                   checked={q.correctIndex === i}
                   onChange={() => setCorrect(q.id, i)}
                 />
-                <input
+                <input                                           // retype
                   value={opt}
                   onChange={(e) =>
                     updateOption(q.id, i, e.target.value)
@@ -64,8 +75,7 @@ export default function Admin() {
             ))}
 
             <div className="flex justify-end">
-              <button
-                onClick={() => deleteQuestion(q.id)}
+              <button onClick={() => deleteQuestion(q.id)}
                 className="px-4 py-1.5 rounded-lg bg-red-500/80 text-sm"
               >
                 Delete

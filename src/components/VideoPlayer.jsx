@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";                                                                                              // stores mutable values without causing re-renders
+
 import { Play, Pause, RotateCcw, Clock, Rewind } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import useVideoProgress from "@/hooks/useVideoProgress";
@@ -76,9 +77,7 @@ export default function VideoPlayer() {
             onClick={handleContinue}
             disabled={!hasEnded}
             className={`px-8 py-2 rounded-full ${
-              hasEnded
-                ? "bg-indigo-600"
-                : "bg-white/20 opacity-50 cursor-not-allowed"
+              hasEnded ? "bg-indigo-600" : "bg-white/20 opacity-50 cursor-not-allowed"
             }`}
           >
             Continue to Post-Test
@@ -94,3 +93,8 @@ export default function VideoPlayer() {
     </main>
   );
 }
+
+
+
+// VideoPlayer.jsx: UI/presentation -renders the player container, buttons, time display, and the "Continue" button. 
+// useVideoProgress: logic/behavior — creates and controls the Vimeo Player, tracks playback state, and persists progress.
