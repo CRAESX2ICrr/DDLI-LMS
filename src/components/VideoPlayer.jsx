@@ -95,6 +95,6 @@ export default function VideoPlayer() {
 }
 
 
-
 // VideoPlayer.jsx: UI/presentation -renders the player container, buttons, time display, and the "Continue" button. 
 // useVideoProgress: logic/behavior — creates and controls the Vimeo Player, tracks playback state, and persists progress.
+// React git upd
